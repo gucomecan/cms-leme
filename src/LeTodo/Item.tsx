@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useMemo, useState } from 'react';
 import { ItemT } from './types';
 
 type Prop = {
@@ -9,12 +9,13 @@ type Prop = {
   onEdit?: (item: ItemT) => void;
 };
 
+const noData = (data?: ItemT) => !data?.title && !data?.description;
+
 const Item = ({ onAdd, onDelete, onEdit, viewMode, initData }: Prop) => {
   const [data, setData] = useState<ItemT | undefined>(initData);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const noModification = viewMode && !isEditing;
-  const noData = () => !data?.title && !data?.description;
 
   const handleReset = () => setData(undefined);
 
@@ -22,8 +23,10 @@ const Item = ({ onAdd, onDelete, onEdit, viewMode, initData }: Prop) => {
     setData((prev) => ({ ...prev, [itemProp]: event.target.value } as ItemT));
   };
 
+  const hasNoData = useMemo(() => noData(data), [data]);
+
   const handleAdd = () => {
-    if (noData()) return;
+    if (hasNoData) return;
 
     onAdd(data!);
     handleReset();
@@ -32,7 +35,7 @@ const Item = ({ onAdd, onDelete, onEdit, viewMode, initData }: Prop) => {
   const handleEdit = () => {
     setIsEditing(false);
 
-    if (noData()) {
+    if (hasNoData) {
       data?.id && onDelete?.(data.id);
       return;
     }
@@ -43,25 +46,35 @@ const Item = ({ onAdd, onDelete, onEdit, viewMode, initData }: Prop) => {
   return (
     <>
       <div>
+        <label htmlFor="item-title">Title</label>
         <input
           disabled={noModification}
           type="text"
           id="item-title"
           value={data?.title ?? ''}
           onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, 'title')}
+          style={{ marginRight: 20, marginLeft: 10 }}
         />
+
+        <label htmlFor="item-description">Description</label>
         <input
           disabled={noModification}
           type="text"
           id="item-description"
           value={data?.description ?? ''}
           onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, 'description')}
+          style={{ marginLeft: 10 }}
         />
-        {noModification && <button onClick={() => setIsEditing(true)}>Edit</button>}
-        {viewMode && isEditing && <button onClick={handleEdit}>Save</button>}
-        {viewMode && <button onClick={() => onDelete?.(data?.id)}>Delete</button>}
+        <br />
+        {noModification && <button onClick={() => setIsEditing(true)}>✏️</button>}
+        {viewMode && isEditing && <button onClick={handleEdit}>💾</button>}
+        {viewMode && <button onClick={() => onDelete?.(data?.id)}>❌</button>}
       </div>
-      {!viewMode && <button onClick={handleAdd}>Add</button>}
+      {!viewMode && (
+        <button style={{ marginTop: 20 }} disabled={hasNoData} onClick={handleAdd}>
+          ➕
+        </button>
+      )}
     </>
   );
 };

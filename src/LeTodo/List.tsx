@@ -2,18 +2,23 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import Item from './Item';
-import { ItemT } from './types';
+import { CategoryT, ItemT } from './types';
 
-const List = () => {
-  const [list, setList] = useState<ItemT[]>([]);
+type Props = {
+  category?: CategoryT;
+};
 
+const List = ({ category }: Props) => {
+  // NOTE: need a endpoint that fetch
+  const [items, setItems] = useState<ItemT[]>([]);
   const handleAdd = (item: ItemT) => {
-    setList((prev) => [...prev, { ...item, id: uuidv4() }]);
+    setItems((prev) => [...prev, { ...item, id: uuidv4() }]);
   };
+
   const handleEdit = (item: ItemT) => {
-    const itemToIditIndex = list.findIndex((i) => i.id === item.id);
+    const itemToIditIndex = items.findIndex((i) => i.id === item.id);
     if (isNaN(itemToIditIndex)) {
-      setList((prev) => {
+      setItems((prev) => {
         prev[itemToIditIndex] = item;
 
         return prev;
@@ -24,14 +29,15 @@ const List = () => {
   const handleDelete = (id?: string) => {
     if (!id) return;
 
-    const updatedList = list.filter((item) => item.id !== id);
-    setList(updatedList);
+    const updatedList = items.filter((item) => item.id !== id);
+    setItems(updatedList);
   };
 
   return (
     <>
-      <div>
-        {list.map((item) => (
+      <h2>{category}</h2>
+      <div style={items.length ? { border: '2px dashed orange', marginBottom: 20, padding: 20 } : {}}>
+        {items.map((item) => (
           <Item viewMode key={item.id} onAdd={handleAdd} initData={item} onDelete={handleDelete} onEdit={handleEdit} />
         ))}
       </div>

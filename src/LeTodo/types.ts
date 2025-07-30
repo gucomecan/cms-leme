@@ -20,10 +20,13 @@ export const DefaultCategoryEnum = createEnumFromUnion<DefaultCategoryT>([
   'Health',
   'Work',
 ]);
+export type CategoryT = DefaultCategoryT | string;
+
+export const DefaultCategories: DefaultCategoryT[] = Object.values(DefaultCategoryEnum);
 
 export type ItemT = {
   id: string;
   title: string;
   description?: string;
-  category?: DefaultCategoryT | string;
+  category?: CategoryT;
 };
