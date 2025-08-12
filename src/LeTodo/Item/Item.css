@@ -1,0 +1,20 @@
+.item-row {
+  display: flex;
+  align-items: center;
+}
+
+.item-row:first-child {
+  margin-bottom: 20px;
+}
+
+.item-row label {
+  display: inline-block;
+  width: 120px;
+  text-align: left;
+  margin-right: 10px;
+}
+
+.item-row input {
+  flex: 1;
+  padding: 7px;
+}

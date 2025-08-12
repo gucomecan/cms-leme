@@ -3,7 +3,8 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import App from './App.tsx';
 import './index.css';
-import { Dashboard } from './LeTodo';
+import { Category } from './LeTodo';
+import { ToDoProvider } from './LeTodo/Store/ToDoProvider.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -11,7 +12,14 @@ createRoot(document.getElementById('root')!).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route element={<App />}>
-          <Route path="/todo" element={<Dashboard />} />
+          <Route
+            path="/todo"
+            element={
+              <ToDoProvider>
+                <Category />
+              </ToDoProvider>
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,48 +1,26 @@
-import { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import { Item } from './Item';
+import { useTodo } from './Store/useTodo';
+import { UserCategoryT } from './Store/types';
 
-import Item from './Item';
-import { CategoryT, ItemT } from './types';
-
-type Props = {
-  category?: CategoryT;
+export type Props = {
+  category: UserCategoryT;
 };
 
 const List = ({ category }: Props) => {
-  // NOTE: need a endpoint that fetch
-  const [items, setItems] = useState<ItemT[]>([]);
-  const handleAdd = (item: ItemT) => {
-    setItems((prev) => [...prev, { ...item, id: uuidv4() }]);
-  };
-
-  const handleEdit = (item: ItemT) => {
-    const itemToIditIndex = items.findIndex((i) => i.id === item.id);
-    if (isNaN(itemToIditIndex)) {
-      setItems((prev) => {
-        prev[itemToIditIndex] = item;
-
-        return prev;
-      });
-    }
-  };
-
-  const handleDelete = (id?: string) => {
-    if (!id) return;
-
-    const updatedList = items.filter((item) => item.id !== id);
-    setItems(updatedList);
-  };
+  const {
+    items: { itemsIds },
+  } = useTodo(category);
 
   return (
     <>
       <h2>{category}</h2>
-      <div style={items.length ? { border: '2px dashed orange', marginBottom: 20, padding: 20 } : {}}>
-        {items.map((item) => (
-          <Item viewMode key={item.id} onAdd={handleAdd} initData={item} onDelete={handleDelete} onEdit={handleEdit} />
+      <div style={itemsIds.length ? { border: '2px dashed orange', marginBottom: 20, padding: 20 } : {}}>
+        {itemsIds.map((id) => (
+          <Item viewMode key={id} id={id} category={category} />
         ))}
       </div>
       <div>
-        <Item onAdd={handleAdd} />
+        <Item category={category} />
       </div>
     </>
   );
