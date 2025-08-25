@@ -1,5 +1,5 @@
 import List from './List';
-import { useTodo } from './Store/useTodo';
+import { useTodo } from '../store/useTodo';
 import { AddCategory } from './AddCategory';
 import { DeleteCategory } from './DeleteCategory';
 

@@ -1,8 +1,8 @@
-import { ChangeEvent, useMemo, useState } from 'react';
+import { ChangeEvent, memo, useMemo, useState } from 'react';
 
-import './Item.css';
-import { useTodo } from '../Store/useTodo';
-import { ItemT, UserCategoryT } from '../Store/types';
+import './Item.scss';
+import { useTodo } from '../store/useTodo';
+import { ItemT, UserCategoryT } from '../store/types';
 
 type Prop = {
   category: UserCategoryT;
@@ -12,7 +12,7 @@ type Prop = {
 
 const noData = (data?: Partial<ItemT>) => !data?.title && !data?.description;
 
-export const Item = ({ category, id, viewMode }: Prop) => {
+export const Item = memo(({ category, id, viewMode }: Prop) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const {
     items: { itemsR },
@@ -89,4 +89,4 @@ export const Item = ({ category, id, viewMode }: Prop) => {
       )}
     </>
   );
-};
+});

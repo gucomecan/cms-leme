@@ -1,12 +1,13 @@
-import { Item } from './Item';
-import { useTodo } from './Store/useTodo';
-import { UserCategoryT } from './Store/types';
+import { Item } from '../Item';
+import { useTodo } from '../store/useTodo';
+import { UserCategoryT } from '../store/types';
+import { memo } from 'react';
 
 export type Props = {
   category: UserCategoryT;
 };
 
-const List = ({ category }: Props) => {
+const List = memo(({ category }: Props) => {
   const {
     items: { itemsIds },
   } = useTodo(category);
@@ -24,6 +25,6 @@ const List = ({ category }: Props) => {
       </div>
     </>
   );
-};
+});
 
 export default List;

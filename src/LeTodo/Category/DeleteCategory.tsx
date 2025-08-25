@@ -1,5 +1,5 @@
-import { useTodo } from './Store/useTodo';
-import { UserCategoryT } from './Store/types';
+import { useTodo } from '../store/useTodo';
+import { UserCategoryT } from '../store/types';
 
 type Props = {
   category: UserCategoryT;
