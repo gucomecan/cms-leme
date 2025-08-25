@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import { useTodo } from '../store';
 
-import { useTodo } from './Store/useTodo';
 
 export const AddCategory = () => {
   const [newCategory, setNewCategory] = useState<string>('');
